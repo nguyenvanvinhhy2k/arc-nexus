@@ -235,20 +235,6 @@ For bridge testing, also claim:
 
 ---
 
-# 🤝 Contributing
-
-Contributions are welcome.
-
-```bash
-git checkout -b feature/my-feature
-git commit -m "Add new feature"
-git push origin feature/my-feature
-```
-
-Then open a Pull Request.
-
----
-
 # 📞 Contact
 
 ### Developer
