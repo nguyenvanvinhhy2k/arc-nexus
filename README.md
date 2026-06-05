@@ -76,4 +76,4 @@ Use the official token addresses below to import them into your personal Web3 wa
 
 ## 🤝 Need Support?
 If you encounter any issues or need assistance configuring and expanding this boilerplate, reach out directly on X (Twitter):  
-👉 **[https://x.com/trungkts29](https://x.com/trungkts29)**
+👉 **[https://x.com/th787252](https://x.com/th787252)**
