@@ -9,8 +9,8 @@ Welcome to **Arc Nexus**! This is a polished EVM decentralized application (dApp
 ### Step 1: Clone & Install Thrid-Party Libraries
 ```bash
 # Clone the repository
-git clone https://github.com/ntclick/arc-starter-kit.git
-cd arc-starter-kit
+git clone https://github.com/nguyenvanvinhhy2k/arc-nexus.git
+cd arc-nexus
 
 # Install dependencies
 npm install
@@ -30,7 +30,7 @@ npm install
 ```bash
 npm run dev
 ```
-👉 Open your browser and navigate to: **[http://localhost:5000](http://localhost:5000)**
+👉 Open your browser and navigate to: **[http://localhost:3000](http://localhost:3000)**
 
 ---
 
