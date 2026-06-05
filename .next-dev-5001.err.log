@@ -1,0 +1,8 @@
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:5000
+- PID:          9188
+- Dir:          C:\Users\Admin\Desktop\Arc-Starter-Kit
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 9188 /F to stop it.
