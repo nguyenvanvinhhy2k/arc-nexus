@@ -1,224 +1,88 @@
-# Arc Nexus
+# 🚀 Arc Nexus
 
-A unified DeFi workspace built on Arc Network.
+### Unified DeFi Workspace on Arc Network
 
-Arc Nexus brings together token swaps, cross-chain stablecoin transfers, unified balance management, lending, borrowing, and liquidity provisioning into a single interface powered by Arc Network and Circle's Web3 infrastructure.
+Arc Nexus is an all-in-one DeFi dashboard built on **Arc Network**, designed to simplify cross-chain finance and showcase the power of Arc's USDC-native infrastructure.
 
-The goal of Arc Nexus is to simplify access to Arc's ecosystem by providing a developer-friendly and user-friendly dashboard that showcases the core financial primitives available on Arc.
+Users can seamlessly:
 
----
+* 🔄 Swap assets
+* 🌉 Bridge stablecoins across chains
+* 💳 Manage Unified Balance
+* 💰 Lend assets
+* 🏊 Provide liquidity
+* 📈 Borrow against collateral
 
-## Overview
-
-Arc Nexus demonstrates how developers can build a complete DeFi experience on Arc Network using:
-
-* Circle Web3 AppKit
-* Circle CCTP
-* Arc Testnet
-* React / Next.js
-* EVM Smart Contracts
-
-Users can:
-
-* Connect wallets
-* Swap supported assets
-* Bridge stablecoins across chains
-* Deposit and spend through Unified Balance
-* Supply assets to lending markets
-* Provide liquidity
-* Borrow against collateral
-
-All features are accessible from a single application.
+All from a single interface powered by Circle's Web3 infrastructure.
 
 ---
 
-## Key Features
+## ✨ Features
 
-### Wallet Integration
-
-Connect using:
-
-* MetaMask
-* Coinbase Wallet
-* Browser-injected wallets
-
-The application automatically detects supported EVM wallets and prompts users to switch to Arc Testnet when required.
-
----
-
-### Token Swap
-
-Swap supported assets directly on Arc Network.
-
-Supported assets include:
-
-* USDC
-* EURC
-* cirBTC
-
-Capabilities:
-
-* Token selection
-* Quote estimation
-* Price impact preview
-* Transaction confirmation
+| Feature              | Description                                                          |
+| -------------------- | -------------------------------------------------------------------- |
+| 🔐 Wallet Connection | Connect MetaMask, Coinbase Wallet, and other EVM wallets             |
+| 🔄 Swap              | Exchange USDC, EURC, and cirBTC on Arc Testnet                       |
+| 🌉 Bridge            | Transfer USDC & EURC between Arc, Base Sepolia, and Ethereum Sepolia |
+| 💳 Gateway           | Deposit into Unified Balance and spend across chains                 |
+| 💰 Lend              | Supply assets into lending markets                                   |
+| 🏊 Pool              | Add liquidity to supported trading pairs                             |
+| 📈 Borrow            | Borrow assets using collateral positions                             |
+| ⚡ Arc Native         | Built specifically for Arc's USDC-native ecosystem                   |
 
 ---
 
-### Cross-Chain Bridge
-
-Transfer stablecoins between supported networks using Circle CCTP.
-
-Supported networks:
-
-* Arc Testnet
-* Ethereum Sepolia
-* Base Sepolia
-
-Features:
-
-* USDC bridging
-* EURC bridging
-* Fast settlement options
-* Destination wallet customization
-
----
-
-### Unified Balance Gateway
-
-Manage balances across networks using Arc's Unified Balance concept.
-
-Functions:
-
-#### Deposit
-
-Move USDC from external chains into Unified Balance.
-
-#### Instant Spend
-
-Spend USDC directly from Unified Balance to any supported destination network.
-
-Benefits:
-
-* Reduced bridging complexity
-* Improved user experience
-* Cross-chain liquidity abstraction
-
----
-
-### Lending
-
-Supply assets to supported lending markets.
-
-Users can:
-
-* View available markets
-* Supply assets
-* Track positions
-* Monitor balances
-
----
-
-### Liquidity Pools
-
-Provide liquidity to supported pools.
-
-Users can:
-
-* Select trading pairs
-* Deposit token pairs
-* Receive LP positions
-* Contribute liquidity to Arc ecosystem markets
-
----
-
-### Borrowing
-
-Borrow assets against supplied collateral.
-
-Features:
-
-* Collateral recommendations
-* Borrow amount validation
-* Position monitoring
-* Transaction execution
-
----
-
-## Technology Stack
-
-### Frontend
-
-* Next.js
-* React
-* TypeScript
-* Tailwind CSS
-
-### Blockchain
-
-* Arc Network
-* Ethereum-compatible smart contracts
-
-### Infrastructure
-
-* Circle Web3 AppKit
-* Circle CCTP
-* Arc RPC
-
-### Wallets
-
-* MetaMask
-* Coinbase Wallet
-* Injected EVM wallets
-
----
-
-## Project Structure
+# 🏗 Architecture
 
 ```text
-src/
-├── app/
-├── components/
-├── hooks/
-├── lib/
-├── services/
-├── constants/
-└── types/
-
-public/
-.env.example
+┌─────────────────┐
+│     Wallet      │
+│ MetaMask/AppKit │
+└────────┬────────┘
+         │
+         ▼
+┌─────────────────┐
+│    Arc Nexus    │
+│    Frontend     │
+└────────┬────────┘
+         │
+ ┌───────┼────────┐
+ ▼       ▼        ▼
+Swap   Bridge   Gateway
+ │       │         │
+ ▼       ▼         ▼
+Arc   Circle     Unified
+DEX    CCTP      Balance
 ```
-
-### Important Directories
-
-#### components/
-
-Reusable UI components.
-
-#### services/
-
-Blockchain interaction logic.
-
-#### hooks/
-
-React hooks for wallet and blockchain state management.
-
-#### constants/
-
-Contract addresses and network configuration.
 
 ---
 
-## Installation
+# 🛠 Tech Stack
 
-Clone the repository:
+| Layer           | Technology         |
+| --------------- | ------------------ |
+| Frontend        | Next.js            |
+| Language        | TypeScript         |
+| UI              | Tailwind CSS       |
+| Wallet          | Circle Web3 AppKit |
+| Blockchain      | Arc Network        |
+| Bridge          | Circle CCTP        |
+| Smart Contracts | Solidity           |
+| Package Manager | npm                |
+
+---
+
+# 📦 Installation
+
+### 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/nguyenvanvinhhy2k/arc-nexus.git
+
 cd arc-nexus
 ```
 
-Install dependencies:
+### 2️⃣ Install Dependencies
 
 ```bash
 npm install
@@ -226,7 +90,7 @@ npm install
 
 ---
 
-## Environment Configuration
+# ⚙️ Environment Setup
 
 Create a local environment file:
 
@@ -234,21 +98,41 @@ Create a local environment file:
 cp .env.example .env.local
 ```
 
-Configure your Circle Kit Key:
+Add your Circle Web3 AppKit Kit Key:
 
 ```env
 NEXT_PUBLIC_CIRCLE_KIT_KEY=KIT_KEY:YOUR_KEY_HERE
 ```
 
-Additional values may already be preconfigured:
+### Example
 
-* Arc Testnet RPC
-* Token addresses
-* Contract addresses
+```env
+NEXT_PUBLIC_CIRCLE_KIT_KEY=KIT_KEY:abcd1234:xyz98765
+```
 
 ---
 
-## Running Locally
+# 🔑 Get a Circle Kit Key
+
+To use Swap and Bridge functionality, obtain a Kit Key from Circle:
+
+### Steps
+
+1. Visit https://console.circle.com
+2. Sign in or create an account
+3. Navigate to:
+
+```text
+Developer Console → API Keys
+```
+
+4. Click **Create Kit Key**
+5. Copy the generated key
+6. Add it to `.env.local`
+
+---
+
+# 🚀 Run the Application
 
 Start the development server:
 
@@ -264,148 +148,201 @@ http://localhost:3000
 
 ---
 
-## Arc Testnet Requirements
+# 🌐 Supported Networks
 
-Before using the application:
+| Network          | Purpose                     |
+| ---------------- | --------------------------- |
+| Arc Testnet      | Primary application network |
+| Ethereum Sepolia | Bridge source/destination   |
+| Base Sepolia     | Bridge source/destination   |
 
-### 1. Connect a Wallet
+---
 
-Supported wallets:
+# 💧 Faucet Guide
 
-* MetaMask
-* Coinbase Wallet
+Arc uses **USDC as the native gas token**.
 
-### 2. Switch to Arc Testnet
+Before testing the application:
 
-Ensure your wallet is connected to Arc Testnet.
+### Arc Testnet
 
-### 3. Obtain Testnet Assets
+Claim:
 
-Arc uses USDC as the native gas token.
+* USDC
+* EURC
 
-You must have testnet USDC to execute transactions.
+From:
 
-Circle Faucet:
-
+```text
 https://faucet.circle.com
+```
+
+### Sepolia Networks
+
+For bridge testing, also claim:
+
+| Network          | Gas Required |
+| ---------------- | ------------ |
+| Ethereum Sepolia | ETH          |
+| Base Sepolia     | ETH          |
 
 ---
 
-## Supported Assets
+# 🪙 Supported Assets
 
-| Asset  | Address                                    | Decimals |
-| ------ | ------------------------------------------ | -------- |
-| USDC   | 0x3600000000000000000000000000000000000000 | 6        |
-| EURC   | 0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a | 6        |
-| USYC   | 0xe9185F0c5F296Ed1797AaE4238D26CCaBEadb86C | 6        |
-| cirBTC | 0xf0C4a4CE82A5746AbAAd9425360Ab04fbBA432BF | 8        |
-
----
-
-## User Guide
-
-### Swap
-
-1. Open Swap.
-2. Select input token.
-3. Select output token.
-4. Enter amount.
-5. Review quote.
-6. Confirm transaction.
+| Asset          | Symbol | Decimals | Contract Address                             |
+| -------------- | ------ | -------- | -------------------------------------------- |
+| USD Coin       | USDC   | 6        | `0x3600000000000000000000000000000000000000` |
+| Euro Coin      | EURC   | 6        | `0x89B50855Aa3bE2F677cD6303Cec089B5F319D72a` |
+| Hashnote USYC  | USYC   | 6        | `0xe9185F0c5F296Ed1797AaE4238D26CCaBEadb86C` |
+| Circle Bitcoin | cirBTC | 8        | `0xf0C4a4CE82A5746AbAAd9425360Ab04fbBA432BF` |
 
 ---
 
-### Bridge
+# 📖 User Guide
 
-1. Open Bridge.
-2. Select source chain.
-3. Select destination chain.
-4. Select asset.
-5. Enter amount.
-6. Confirm transaction.
+## 🔄 Swap
 
----
-
-### Gateway
-
-Deposit:
-
-1. Select source chain.
-2. Enter USDC amount.
-3. Deposit into Unified Balance.
-
-Spend:
-
-1. Select destination chain.
-2. Enter recipient address.
-3. Confirm transfer.
+| Step | Action                  |
+| ---- | ----------------------- |
+| 1    | Open Swap               |
+| 2    | Select token to pay     |
+| 3    | Select token to receive |
+| 4    | Enter amount            |
+| 5    | Review quote            |
+| 6    | Confirm transaction     |
 
 ---
 
-### Lend
+## 🌉 Bridge
 
-1. Choose a lending market.
-2. Enter amount.
-3. Click Lend.
-4. Confirm transaction.
-
----
-
-### Pool
-
-1. Select a liquidity pair.
-2. Enter token amounts.
-3. Add liquidity.
-4. Confirm transaction.
+| Step | Action                   |
+| ---- | ------------------------ |
+| 1    | Open Bridge              |
+| 2    | Select source chain      |
+| 3    | Select destination chain |
+| 4    | Choose asset             |
+| 5    | Enter amount             |
+| 6    | Confirm bridge           |
 
 ---
 
-### Borrow
+## 💳 Gateway
 
-1. Select an asset.
-2. Review collateral requirements.
-3. Enter borrow amount.
-4. Confirm transaction.
+### Deposit
 
----
+| Step | Action                       |
+| ---- | ---------------------------- |
+| 1    | Choose source network        |
+| 2    | Enter USDC amount            |
+| 3    | Deposit into Unified Balance |
 
-## Future Improvements
+### Instant Spend
 
-Potential roadmap items:
-
-* Position dashboard
-* Yield analytics
-* Portfolio tracking
-* Multi-wallet support
-* Transaction history
-* Notifications
-* Mobile optimization
-* Mainnet deployment
+| Step | Action                     |
+| ---- | -------------------------- |
+| 1    | Choose destination network |
+| 2    | Enter recipient address    |
+| 3    | Enter amount               |
+| 4    | Confirm transfer           |
 
 ---
 
-## Contributing
+## 💰 Lend
+
+| Step | Action                |
+| ---- | --------------------- |
+| 1    | Select lending market |
+| 2    | Enter amount          |
+| 3    | Click Lend            |
+| 4    | Confirm transaction   |
+
+---
+
+## 🏊 Pool
+
+| Step | Action                |
+| ---- | --------------------- |
+| 1    | Select liquidity pair |
+| 2    | Enter token amounts   |
+| 3    | Add liquidity         |
+| 4    | Confirm transaction   |
+
+---
+
+## 📈 Borrow
+
+| Step | Action                         |
+| ---- | ------------------------------ |
+| 1    | Select asset                   |
+| 2    | Review collateral requirements |
+| 3    | Enter amount                   |
+| 4    | Confirm borrow                 |
+
+---
+
+# 🎯 Why Arc Nexus?
+
+✅ Unified DeFi Experience
+
+✅ Built for Arc's USDC-Native Economy
+
+✅ Cross-Chain Stablecoin Transfers
+
+✅ Circle Web3 AppKit Integration
+
+✅ Circle CCTP Support
+
+✅ Developer-Friendly Architecture
+
+✅ Ready for Extension and Production Development
+
+---
+
+# 🗺 Roadmap
+
+| Status | Feature             |
+| ------ | ------------------- |
+| ✅      | Swap                |
+| ✅      | Bridge              |
+| ✅      | Gateway             |
+| ✅      | Lend                |
+| ✅      | Pool                |
+| ✅      | Borrow              |
+| 🔄     | Portfolio Dashboard |
+| 🔄     | Transaction History |
+| 🔄     | Yield Analytics     |
+| 🔄     | Position Tracking   |
+| 🔄     | Mainnet Support     |
+
+---
+
+# 🤝 Contributing
 
 Contributions are welcome.
 
-Fork the repository, create a feature branch, and submit a pull request.
+```bash
+git checkout -b feature/my-feature
+git commit -m "Add new feature"
+git push origin feature/my-feature
+```
+
+Then open a Pull Request.
 
 ---
 
-## License
+# 📞 Contact
 
-MIT License
+### Developer
 
----
-
-## Contact
-
-Developer:
-
-X (Twitter)
+🐦 X (Twitter)
 
 https://x.com/th787252
 
-Repository:
+### Repository
 
-https://github.com/nguyenvanvinhhy2k/arc-nexus
+🌐 https://github.com/nguyenvanvinhhy2k/arc-nexus
+
+---
+
+### Built with ❤️ for the Arc Ecosystem
