@@ -59,56 +59,56 @@ const borrowMarkets: Market[] = [
 ];
 
 const docs = [
-{
-title: "1. Connect Your Wallet and Select a Network",
-description: "Prepare your wallet before interacting with the dApp so all modules can read balances correctly and send transactions on the right network.",
-steps: [
-"Click Connect Wallet in the top-right corner.",
-"Choose MetaMask, Coinbase Wallet, or any injected browser wallet.",
-"Switch to Arc Testnet when using Swap, Lend, Pool, or Borrow.",
-"Make sure you have testnet USDC, as Arc uses USDC as the native gas token.",
-],
-},
-{
-title: "2. Swap Tokens on Arc",
-description: "Use the Swap tab to exchange USDC, EURC, and cirBTC directly within the workspace.",
-steps: [
-"Open the Swap tab from the left-hand menu.",
-"Select the token you want to pay in the Pay field and the token you want to receive in the Receive field.",
-"Enter the amount, and the dApp will estimate the received tokens and price impact.",
-"Review the estimated fees, then click Swap Tokens and confirm the transaction in your wallet.",
-],
-},
-{
-title: "3. Bridge Stablecoins",
-description: "Use the Bridge tab to transfer USDC or EURC between Arc Testnet, Ethereum Sepolia, and Base Sepolia via Circle CCTP.",
-steps: [
-"Select the Source Chain and Destination Chain.",
-"Choose USDC or EURC and enter the amount to bridge.",
-"Verify the recipient address. By default, the dApp fills in the connected wallet address.",
-"Choose Fast or Standard mode, then click Bridge Stablecoin and confirm the transaction.",
-],
-},
-{
-title: "4. Gateway Unified Balance",
-description: "Use the Gateway tab to deposit USDC into your Unified Balance or spend it instantly on a destination network.",
-steps: [
-"In Deposit USDC, select the source network and enter the amount of USDC to deposit.",
-"Click Deposit into Gateway to transfer funds into your Unified Balance.",
-"In Instant Spend, choose the destination network, enter the amount, and provide the recipient address.",
-"Click Spend USDC Instantly to send USDC from your Unified Balance to the recipient.",
-],
-},
-{
-title: "5. Lend, Pool, and Borrow",
-description: "These DeFi tabs allow you to view markets, enter amounts, and interact with contracts configured in .env.local.",
-steps: [
-"Lend: Select a market, enter an amount, and click Lend to supply assets.",
-"Pool: Choose a liquidity pair, enter both token amounts, and click Add Liquidity.",
-"Borrow: Select the asset you want to borrow, review collateral suggestions, and click Borrow.",
-"If a button is disabled, check your wallet connection, Arc Testnet network, token balances, and contract addresses.",
-],
-},
+  {
+    title: "1. Connect Your Wallet and Select a Network",
+    description: "Prepare your wallet before interacting with the dApp so all modules can read balances correctly and send transactions on the right network.",
+    steps: [
+      "Click Connect Wallet in the top-right corner.",
+      "Choose MetaMask, Coinbase Wallet, or any injected browser wallet.",
+      "Switch to Arc Testnet when using Swap, Lend, Pool, or Borrow.",
+      "Make sure you have testnet USDC, as Arc uses USDC as the native gas token.",
+    ],
+  },
+  {
+    title: "2. Swap Tokens on Arc",
+    description: "Use the Swap tab to exchange USDC, EURC, and cirBTC directly within the workspace.",
+    steps: [
+      "Open the Swap tab from the left-hand menu.",
+      "Select the token you want to pay in the Pay field and the token you want to receive in the Receive field.",
+      "Enter the amount, and the dApp will estimate the received tokens and price impact.",
+      "Review the estimated fees, then click Swap Tokens and confirm the transaction in your wallet.",
+    ],
+  },
+  {
+    title: "3. Bridge Stablecoins",
+    description: "Use the Bridge tab to transfer USDC or EURC between Arc Testnet, Ethereum Sepolia, and Base Sepolia via Circle CCTP.",
+    steps: [
+      "Select the Source Chain and Destination Chain.",
+      "Choose USDC or EURC and enter the amount to bridge.",
+      "Verify the recipient address. By default, the dApp fills in the connected wallet address.",
+      "Choose Fast or Standard mode, then click Bridge Stablecoin and confirm the transaction.",
+    ],
+  },
+  {
+    title: "4. Gateway Unified Balance",
+    description: "Use the Gateway tab to deposit USDC into your Unified Balance or spend it instantly on a destination network.",
+    steps: [
+      "In Deposit USDC, select the source network and enter the amount of USDC to deposit.",
+      "Click Deposit into Gateway to transfer funds into your Unified Balance.",
+      "In Instant Spend, choose the destination network, enter the amount, and provide the recipient address.",
+      "Click Spend USDC Instantly to send USDC from your Unified Balance to the recipient.",
+    ],
+  },
+  {
+    title: "5. Lend, Pool, and Borrow",
+    description: "These DeFi tabs allow you to view markets, enter amounts, and interact with contracts configured in .env.local.",
+    steps: [
+      "Lend: Select a market, enter an amount, and click Lend to supply assets.",
+      "Pool: Choose a liquidity pair, enter both token amounts, and click Add Liquidity.",
+      "Borrow: Select the asset you want to borrow, review collateral suggestions, and click Borrow.",
+      "If a button is disabled, check your wallet connection, Arc Testnet network, token balances, and contract addresses.",
+    ],
+  },
 ]
 
 
@@ -182,11 +182,10 @@ function MarketRow({
     <button
       type="button"
       onClick={onSelect}
-      className={`grid w-full cursor-pointer gap-3 rounded-lg border p-3 text-left transition sm:grid-cols-[1fr_110px_110px_82px] sm:items-center ${
-        selected
+      className={`grid w-full cursor-pointer gap-3 rounded-lg border p-3 text-left transition sm:grid-cols-[1fr_110px_110px_82px] sm:items-center ${selected
           ? "border-emerald-300 bg-emerald-300/10"
           : "border-white/10 bg-white/[0.03] hover:border-white/25"
-      }`}
+        }`}
     >
       <div>
         <p className="text-sm font-black text-white">{market.name}</p>
@@ -562,11 +561,10 @@ function DocsPanel() {
             type="button"
             key={item.title}
             onClick={() => setActiveDoc(index)}
-            className={`w-full cursor-pointer rounded-lg border p-3 text-left transition ${
-              activeDoc === index
+            className={`w-full cursor-pointer rounded-lg border p-3 text-left transition ${activeDoc === index
                 ? "border-emerald-300 bg-emerald-300/10"
                 : "border-white/10 bg-white/[0.03] hover:border-white/25"
-            }`}
+              }`}
           >
             <div className="mb-3 flex items-center gap-3">
               <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-sm font-black text-stone-950">
