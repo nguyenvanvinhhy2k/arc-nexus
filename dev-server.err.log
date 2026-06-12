@@ -1,0 +1,10 @@
+[browser] Cannot update a component (`ActionPanelContent`) while rendering a different component (`Hydrate`). To locate the bad setState() call inside `Hydrate`, follow the stack trace as described in https://react.dev/link/setstate-in-render 
+    at Set.forEach (<anonymous>) (<anonymous>)
+[browser] Uncaught NotFoundError: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.
+    at SwapWidget (file://C:/Users/Admin/Desktop/arc-nexus/.next/dev/static/chunks/src_0rbutxk._.js?id=%255Bproject%255D%252Fsrc%252Fcomponents%252FSwapWidget.tsx+%255Bapp-client%255D+%2528ecmascript%2529:261:235)
+    at Home (file://C:/Users/Admin/Desktop/arc-nexus/.next/dev/static/chunks/src_13i7f~o._.js:6467:241)
+[browser] Cannot update a component (`SwapWidget`) while rendering a different component (`Hydrate`). To locate the bad setState() call inside `Hydrate`, follow the stack trace as described in https://react.dev/link/setstate-in-render 
+    at Set.forEach (<anonymous>) (<anonymous>)
+[browser] Uncaught NotFoundError: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node.
+    at SwapWidget (file://C:/Users/Admin/Desktop/arc-nexus/.next/dev/static/chunks/src_0rbutxk._.js:2389:235)
+    at Home (file://C:/Users/Admin/Desktop/arc-nexus/.next/dev/static/chunks/src_0rbutxk._.js:7422:241)

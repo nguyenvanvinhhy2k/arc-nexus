@@ -8,9 +8,11 @@ import { useDeFiOperation } from "@/hooks/useDeFiOperation";
 import { useMounted } from "@/hooks/useMounted";
 import { ARC_TESTNET_TOKENS, type TokenSymbol } from "@/config/tokens";
 import { TxStatus } from "@/components/TxStatus";
+import { TradeChart } from "@/components/TradeChart";
 import {
   AlertCircle,
   ArrowUpRight,
+  BarChart3,
   BookOpen,
   CheckCircle2,
   Coins,
@@ -20,6 +22,7 @@ import {
   Loader2,
   Percent,
   PiggyBank,
+  Repeat2,
   ShieldCheck,
   TrendingUp,
   Wallet,
@@ -159,7 +162,7 @@ function StatTile({
   icon: ComponentType<{ className?: string }>;
 }) {
   return (
-    <div className="rounded-lg border border-stone-800 bg-stone-900 px-3 py-2.5">
+    <div className="rounded-lg border border-white/10 bg-white/[0.045] px-3 py-2.5">
       <div className="mb-1.5 flex items-center justify-between gap-3">
         <p className="text-[11px] font-black uppercase tracking-[0.14em] text-stone-400">{label}</p>
         <Icon className="h-4 w-4 text-emerald-300" />
@@ -182,9 +185,9 @@ function MarketRow({
     <button
       type="button"
       onClick={onSelect}
-      className={`grid w-full cursor-pointer gap-3 rounded-lg border p-3 text-left transition sm:grid-cols-[1fr_110px_110px_82px] sm:items-center ${selected
-          ? "border-emerald-300 bg-emerald-300/10"
-          : "border-white/10 bg-white/[0.03] hover:border-white/25"
+      className={`defi-focus grid w-full cursor-pointer gap-3 rounded-lg border p-3 text-left transition sm:grid-cols-[1fr_110px_110px_82px] sm:items-center ${selected
+          ? "border-emerald-300/50 bg-emerald-300/10 shadow-[0_0_28px_rgba(52,245,198,0.1)]"
+          : "border-white/10 bg-white/[0.035] hover:border-cyan-300/30"
         }`}
     >
       <div>
@@ -199,7 +202,7 @@ function MarketRow({
         <p className="text-[11px] font-black uppercase text-stone-500">Depth</p>
         <p className="mt-1 text-sm font-black text-white">{market.depth}</p>
       </div>
-      <span className="inline-flex h-8 items-center justify-center rounded-lg bg-white px-3 text-xs font-black text-stone-950">
+      <span className="inline-flex h-8 items-center justify-center rounded-lg bg-emerald-300 px-3 text-xs font-black text-slate-950">
         {selected ? "Selected" : "Select"}
       </span>
     </button>
@@ -241,6 +244,25 @@ function formatBalance(value: bigint | undefined, symbol: TokenSymbol) {
   });
 }
 
+function parseMarketDepth(depth: string) {
+  const cleaned = depth.replace(/[$,]/g, "").trim().toUpperCase();
+  const numeric = Number.parseFloat(cleaned);
+
+  if (!Number.isFinite(numeric)) {
+    return 0;
+  }
+
+  if (cleaned.endsWith("M")) {
+    return numeric * 1_000_000;
+  }
+
+  if (cleaned.endsWith("K")) {
+    return numeric * 1_000;
+  }
+
+  return numeric;
+}
+
 function ActionPanel({
   mode,
   markets,
@@ -260,7 +282,7 @@ function ActionPanel({
             <StatTile key={stat.label} {...stat} />
           ))}
         </div>
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+        <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
           <div className="h-5 w-40 rounded bg-white/10" />
           <div className="mt-3 h-20 rounded-lg bg-white/[0.04]" />
         </div>
@@ -289,6 +311,7 @@ function ActionPanelContent({
   const [amountB, setAmountB] = useState("");
   const [message, setMessage] = useState(copy.empty);
   const [txStatus, setTxStatus] = useState<"pending" | "complete" | "failed">("pending");
+  const [viewMode, setViewMode] = useState<"action" | "chart">("action");
   const selectedMarket = markets.find((market) => market.id === selectedMarketId) ?? markets[0];
   const isCorrectChain = chain?.id === 5042002;
   const selectedTokens = selectedMarket.assets.map(getTokenConfig);
@@ -317,6 +340,7 @@ function ActionPanelContent({
     secondaryToken ? isPositiveAmount(amountB, secondaryToken.decimals) : false
   );
   const canSubmit = hasValidAmount && hasValidSecondaryAmount && !loading;
+  const poolChartValue = useMemo(() => parseMarketDepth(selectedMarket.depth) / 1_000_000, [selectedMarket.depth]);
 
   const estimatedValue = useMemo(() => {
     const numericAmount = Number(amount);
@@ -388,13 +412,46 @@ function ActionPanelContent({
 
   return (
     <div className="w-full space-y-3">
-      <div className="grid gap-3 sm:grid-cols-3">
-        {stats.map((stat) => (
-          <StatTile key={stat.label} {...stat} />
-        ))}
+      <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
+        <div className="grid gap-3 sm:grid-cols-3">
+          {stats.map((stat) => (
+            <StatTile key={stat.label} {...stat} />
+          ))}
+        </div>
+
+        {mode === "pool" && (
+          <button
+            type="button"
+            onClick={() => setViewMode((current) => current === "action" ? "chart" : "action")}
+            className="defi-focus inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-lg border border-white/10 bg-white/[0.045] px-4 text-sm font-black text-slate-300 transition hover:border-emerald-300/35 hover:text-white"
+          >
+            {viewMode === "action" ? (
+              <>
+                <BarChart3 className="h-4 w-4 text-emerald-300" />
+                Chart
+              </>
+            ) : (
+              <>
+                <Repeat2 className="h-4 w-4 text-emerald-300" />
+                Pool
+              </>
+            )}
+          </button>
+        )}
       </div>
 
-      <div className="grid gap-3 xl:grid-cols-[1fr_280px]">
+      {mode === "pool" && viewMode === "chart" && (
+        <TradeChart
+          key={selectedMarket.id}
+          title="DEX pool chart"
+          pair={selectedMarket.name}
+          value={poolChartValue}
+          suffix="M TVL"
+          mode="pool"
+        />
+      )}
+
+      <div className={`grid gap-3 ${mode === "pool" && viewMode === "chart" ? "" : "xl:grid-cols-[1fr_280px]"}`}>
         <div className="space-y-2">
           {markets.map((market) => (
             <MarketRow
@@ -409,7 +466,8 @@ function ActionPanelContent({
           ))}
         </div>
 
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3.5">
+        {!(mode === "pool" && viewMode === "chart") && (
+        <div className="rounded-lg border border-white/10 bg-white/[0.045] p-3.5">
           <div className="mb-3">
             <p className="text-xs font-black uppercase tracking-[0.14em] text-stone-500">{copy.label}</p>
             <h3 className="mt-1 text-lg font-black text-white">{selectedMarket.name}</h3>
@@ -422,7 +480,7 @@ function ActionPanelContent({
             value={amount}
             onChange={(event) => setAmount(event.target.value)}
             placeholder={`0.00 ${primaryToken.symbol}`}
-            className="h-10 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 text-sm font-black text-white outline-none transition placeholder:text-stone-600 focus:border-emerald-300"
+            className="h-10 w-full rounded-lg border border-white/10 bg-slate-950/80 px-3 text-sm font-black text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300"
           />
           <div className="mt-2 flex items-center justify-between gap-3 text-xs font-bold text-stone-500">
             <span className="inline-flex items-center gap-1.5">
@@ -449,7 +507,7 @@ function ActionPanelContent({
                 value={amountB}
                 onChange={(event) => setAmountB(event.target.value)}
                 placeholder={`0.00 ${secondaryToken.symbol}`}
-                className="h-10 w-full rounded-lg border border-stone-700 bg-stone-950 px-3 text-sm font-black text-white outline-none transition placeholder:text-stone-600 focus:border-emerald-300"
+                className="h-10 w-full rounded-lg border border-white/10 bg-slate-950/80 px-3 text-sm font-black text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-300"
               />
               <div className="mt-2 flex items-center justify-between gap-3 text-xs font-bold text-stone-500">
                 <span className="inline-flex items-center gap-1.5">
@@ -469,7 +527,7 @@ function ActionPanelContent({
             </div>
           )}
 
-          <div className="mt-3 rounded-lg bg-stone-950 p-2.5">
+          <div className="mt-3 rounded-lg border border-white/10 bg-slate-950/70 p-2.5">
             <div className="flex items-center justify-between gap-3 text-sm">
               <span className="font-bold text-stone-500">
                 {mode === "borrow" ? "Estimated yearly interest" : "Estimated yearly value"}
@@ -499,7 +557,7 @@ function ActionPanelContent({
             type="button"
             onClick={submitAction}
             disabled={!canSubmit}
-            className="mt-3 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-300 px-4 text-sm font-black text-stone-950 transition hover:bg-emerald-200 disabled:cursor-not-allowed disabled:opacity-50"
+            className="defi-focus mt-3 inline-flex h-10 w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-300 px-4 text-sm font-black text-slate-950 transition hover:bg-cyan-200 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -524,13 +582,14 @@ function ActionPanelContent({
             </div>
           )}
         </div>
+        )}
       </div>
 
       {result?.txHash && (
-        <div className="rounded-lg border border-white/10 bg-white/[0.03] p-4">
+        <div className="rounded-lg border border-white/10 bg-white/[0.035] p-4">
           <h3 className="mb-3 text-sm font-black uppercase tracking-[0.14em] text-stone-400">Smart contract transaction</h3>
           {result.approveTxHashes.length > 0 && (
-            <div className="mb-3 rounded-lg bg-stone-950 p-3">
+            <div className="mb-3 rounded-lg border border-white/10 bg-slate-950/70 p-3">
               <div className="flex items-center gap-2 text-sm font-bold text-emerald-300">
                 <CheckCircle2 className="h-4 w-4" />
                 Approval transaction{result.approveTxHashes.length > 1 ? "s" : ""} submitted
@@ -563,11 +622,11 @@ function DocsPanel() {
             onClick={() => setActiveDoc(index)}
             className={`w-full cursor-pointer rounded-lg border p-3 text-left transition ${activeDoc === index
                 ? "border-emerald-300 bg-emerald-300/10"
-                : "border-white/10 bg-white/[0.03] hover:border-white/25"
+                : "border-white/10 bg-white/[0.035] hover:border-cyan-300/30"
               }`}
           >
             <div className="mb-3 flex items-center gap-3">
-              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-white text-sm font-black text-stone-950">
+              <span className="flex h-8 w-8 items-center justify-center rounded-md bg-emerald-300 text-sm font-black text-slate-950">
                 {index + 1}
               </span>
               <h3 className="text-base font-black text-white">{item.title}</h3>
@@ -576,7 +635,7 @@ function DocsPanel() {
           </button>
         ))}
       </div>
-      <div className="rounded-lg border border-emerald-400/30 bg-emerald-400/10 p-3.5">
+      <div className="rounded-lg border border-emerald-300/30 bg-emerald-300/10 p-3.5">
         <BookOpen className="mb-3 h-6 w-6 text-emerald-300" />
         <h3 className="text-lg font-black text-white">{selectedDoc.title}</h3>
         <p className="mt-2 text-sm font-medium leading-5 text-emerald-50/80">
@@ -584,16 +643,16 @@ function DocsPanel() {
         </p>
         <ol className="mt-3 space-y-2">
           {selectedDoc.steps.map((step, index) => (
-            <li key={step} className="flex gap-2 rounded-lg bg-stone-950 p-2.5 text-sm font-bold leading-5 text-stone-300">
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-emerald-300 text-[11px] font-black text-stone-950">
+            <li key={step} className="flex gap-2 rounded-lg border border-white/10 bg-slate-950/70 p-2.5 text-sm font-bold leading-5 text-stone-300">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded bg-emerald-300 text-[11px] font-black text-slate-950">
                 {index + 1}
               </span>
               <span>{step}</span>
             </li>
           ))}
         </ol>
-        <div className="mt-3 rounded-lg border border-white/10 bg-stone-950 p-3 text-xs font-bold leading-5 text-stone-400">
-          Lưu ý: các thao tác on-chain cần ví đã kết nối, đúng network và có đủ gas/token testnet trước khi xác nhận giao dịch.
+        <div className="mt-3 rounded-lg border border-white/10 bg-slate-950/70 p-3 text-xs font-bold leading-5 text-stone-400">
+          Note: on-chain actions require a connected wallet, the right network, and enough testnet gas or tokens before confirming the transaction.
         </div>
       </div>
     </div>
@@ -603,7 +662,7 @@ function DocsPanel() {
 export function DeFiWorkspace({ mode }: DeFiWorkspaceProps) {
   return (
     <div className="max-h-full w-full space-y-3 overflow-y-auto pr-1">
-      <div className="rounded-lg border border-white/10 bg-white/[0.03] p-3">
+      <div className="rounded-lg border border-white/10 bg-white/[0.045] p-3">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.16em] text-emerald-300">

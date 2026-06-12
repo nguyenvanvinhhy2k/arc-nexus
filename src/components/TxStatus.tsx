@@ -19,7 +19,7 @@ export function TxStatus({ txHash, status, explorerUrl = "https://testnet.arcsca
   ];
 
   return (
-    <div className="w-full mt-4 p-4 rounded-xl border border-zinc-800 bg-zinc-900/50 backdrop-blur-md">
+    <div className="defi-card mt-4 w-full rounded-lg p-4">
       <div className="flex items-center justify-between mb-3">
         <span className="text-sm font-medium text-zinc-400">Transaction Status</span>
         <div className="flex items-center gap-2">
@@ -60,7 +60,7 @@ export function TxStatus({ txHash, status, explorerUrl = "https://testnet.arcsca
       </div>
 
       {type === "bridge" && (
-        <div className="mt-4 pt-3 border-t border-zinc-800">
+        <div className="mt-4 border-t border-white/10 pt-3">
           <span className="text-xs text-zinc-500 block mb-2 font-medium">Bridge Progress (CCTP)</span>
           <div className="grid grid-cols-4 gap-1">
             {steps.map((step) => (
@@ -69,8 +69,8 @@ export function TxStatus({ txHash, status, explorerUrl = "https://testnet.arcsca
                   className={`w-full h-1.5 rounded-full transition-all duration-300 ${
                     step.active
                       ? status === "complete"
-                        ? "bg-green-500"
-                        : "bg-sky-500"
+                        ? "bg-emerald-400"
+                        : "bg-cyan-400"
                       : "bg-zinc-800"
                   }`}
                 />

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { useAccount, useWalletClient } from "wagmi";
 import { useSwap } from "@/hooks/useSwap";
 import { useMounted } from "@/hooks/useMounted";
@@ -6,8 +6,9 @@ import { ARC_TESTNET_TOKENS, type TokenConfig } from "@/config/tokens";
 import { useUsdcBalance, useEurcBalance, useCirBtcBalance } from "@/hooks/useTokenBalance";
 import { estimateSwapOnArc } from "@/services/swapService";
 import { formatUnits } from "viem";
-import { ArrowDownUp, HelpCircle, Loader2 } from "lucide-react";
+import { ArrowDownUp, BarChart3, HelpCircle, Loader2, Repeat2 } from "lucide-react";
 import { TxStatus } from "./TxStatus";
+import { TradeChart } from "./TradeChart";
 
 export function SwapWidget() {
   const { isConnected, address, chain } = useAccount();
@@ -21,6 +22,7 @@ export function SwapWidget() {
   const [amountIn, setAmountIn] = useState<string>("");
   const [amountOut, setAmountOut] = useState<string>("");
   const [txStatus, setTxStatus] = useState<"pending" | "complete" | "failed">("pending");
+  const [viewMode, setViewMode] = useState<"trade" | "chart">("trade");
 
   const [btcPrice, setBtcPrice] = useState<number>(68500); // Live BTC price fallback
   const [eurPrice, setEurPrice] = useState<number>(1.085); // Live EUR price fallback
@@ -69,6 +71,27 @@ export function SwapWidget() {
 
   const balanceIn = (mounted && isConnected) ? parseFloat(getTokenBalance(tokenIn.symbol)).toFixed(tokenIn.symbol === "cirBTC" ? 6 : 2) : "0.00";
   const balanceOut = (mounted && isConnected) ? parseFloat(getTokenBalance(tokenOut.symbol)).toFixed(tokenOut.symbol === "cirBTC" ? 6 : 2) : "0.00";
+  const chartPair = `${tokenIn.symbol}/${tokenOut.symbol}`;
+  const chartPrice = useMemo(() => {
+    if (amountIn && amountOut) {
+      const input = Number(amountIn);
+      const output = Number(amountOut);
+
+      if (Number.isFinite(input) && input > 0 && Number.isFinite(output) && output > 0) {
+        return output / input;
+      }
+    }
+
+    if (tokenIn.symbol === tokenOut.symbol) return 1;
+    if (tokenIn.symbol === "USDC" && tokenOut.symbol === "EURC") return 1 / eurPrice;
+    if (tokenIn.symbol === "EURC" && tokenOut.symbol === "USDC") return eurPrice;
+    if (tokenIn.symbol === "USDC" && tokenOut.symbol === "cirBTC") return 1 / btcPrice;
+    if (tokenIn.symbol === "cirBTC" && tokenOut.symbol === "USDC") return btcPrice;
+    if (tokenIn.symbol === "EURC" && tokenOut.symbol === "cirBTC") return eurPrice / btcPrice;
+    if (tokenIn.symbol === "cirBTC" && tokenOut.symbol === "EURC") return btcPrice / eurPrice;
+
+    return 1;
+  }, [amountIn, amountOut, btcPrice, eurPrice, tokenIn.symbol, tokenOut.symbol]);
 
   // Calculate dynamic exchange rates based on live on-chain quoting & public price feeds
   useEffect(() => {
@@ -154,19 +177,45 @@ export function SwapWidget() {
   };
 
   return (
-    <div className="flex max-h-full w-full max-w-md mx-auto flex-col overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 shadow-2xl backdrop-blur-lg">
+    <div className={`defi-card flex max-h-full w-full ${viewMode === "chart" ? "max-w-5xl" : "max-w-md"} mx-auto flex-col overflow-y-auto rounded-lg p-4`}>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-100">
           <span>Swap Tokens</span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">
+          <span className="rounded-lg border border-emerald-300/25 bg-emerald-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-200">
             Arc Testnet
           </span>
         </h2>
+        <button
+          type="button"
+          onClick={() => setViewMode((current) => current === "trade" ? "chart" : "trade")}
+          className="defi-focus inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg border border-white/10 bg-white/[0.045] px-3 text-xs font-black text-slate-300 transition hover:border-emerald-300/35 hover:text-white"
+        >
+          {viewMode === "trade" ? (
+            <>
+              <BarChart3 className="h-4 w-4 text-emerald-300" />
+              Chart
+            </>
+          ) : (
+            <>
+              <Repeat2 className="h-4 w-4 text-emerald-300" />
+              Trade
+            </>
+          )}
+        </button>
       </div>
 
+      {viewMode === "chart" ? (
+        <TradeChart
+          key={chartPair}
+          title="DEX market chart"
+          pair={chartPair}
+          value={chartPrice}
+          suffix={tokenOut.symbol}
+        />
+      ) : (
       <form onSubmit={handleSwap} className="flex flex-1 flex-col justify-between gap-3">
         {/* Token In Input */}
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-3.5 transition-all focus-within:border-sky-500/50">
+        <div className="rounded-lg border border-white/10 bg-white/[0.045] p-3.5 transition-all focus-within:border-emerald-300/50">
           <div className="flex items-center justify-between mb-1.5 text-xs text-zinc-500">
             <span>Pay</span>
             <span>Balance: {balanceIn} {tokenIn.symbol}</span>
@@ -200,7 +249,7 @@ export function SwapWidget() {
                   }
                 }
               }}
-              className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-sm font-semibold text-zinc-200 focus:outline-none"
+              className="defi-focus rounded-lg border border-white/10 bg-slate-950 px-3 py-1.5 text-sm font-semibold text-zinc-200"
               disabled={loading}
             >
               {ARC_TESTNET_TOKENS.map((t) => (
@@ -218,14 +267,14 @@ export function SwapWidget() {
             type="button"
             onClick={handleFlip}
             disabled={loading}
-            className="p-2 rounded-xl border border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-sky-400 hover:border-sky-500/30 transition-all shadow-md cursor-pointer hover:scale-105 active:scale-95 disabled:opacity-50"
+            className="defi-focus cursor-pointer rounded-lg border border-white/10 bg-slate-950 p-2 text-zinc-400 shadow-md transition-all hover:scale-105 hover:border-cyan-300/30 hover:text-cyan-300 active:scale-95 disabled:opacity-50"
           >
             <ArrowDownUp className="h-4 w-4" />
           </button>
         </div>
 
         {/* Token Out Input */}
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-3.5">
+        <div className="rounded-lg border border-white/10 bg-white/[0.045] p-3.5">
           <div className="flex items-center justify-between mb-1.5 text-xs text-zinc-500">
             <span>Receive (Estimated)</span>
             <span>Balance: {balanceOut} {tokenOut.symbol}</span>
@@ -250,7 +299,7 @@ export function SwapWidget() {
                   }
                 }
               }}
-              className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-sm font-semibold text-zinc-200 focus:outline-none"
+              className="defi-focus rounded-lg border border-white/10 bg-slate-950 px-3 py-1.5 text-sm font-semibold text-zinc-200"
               disabled={loading}
             >
               {ARC_TESTNET_TOKENS.map((t) => (
@@ -263,7 +312,7 @@ export function SwapWidget() {
         </div>
 
         {/* Fee & Network details */}
-        <div className="space-y-1.5 rounded-2xl border border-zinc-900 bg-zinc-900/30 p-3 text-xs text-zinc-400">
+        <div className="space-y-1.5 rounded-lg border border-white/10 bg-slate-950/55 p-3 text-xs text-zinc-400">
           <div className="flex justify-between">
             <span className="flex items-center gap-1">
               Estimated Fee <HelpCircle className="h-3 w-3 text-zinc-600" />
@@ -278,18 +327,18 @@ export function SwapWidget() {
 
         {/* Submit Swap */}
         {(!mounted || !isConnected) ? (
-          <div className="w-full rounded-2xl border border-dashed border-zinc-800 px-4 py-3 text-center text-sm text-zinc-500">
+          <div className="w-full rounded-lg border border-dashed border-white/15 px-4 py-3 text-center text-sm text-zinc-500">
             Please connect wallet to swap
           </div>
         ) : !isCorrectChain ? (
-          <div className="w-full rounded-2xl border border-dashed border-rose-900/30 bg-rose-500/5 px-4 py-3 text-center text-sm text-rose-400/80">
+          <div className="w-full rounded-lg border border-dashed border-rose-400/30 bg-rose-500/5 px-4 py-3 text-center text-sm text-rose-300/80">
             Please switch chain to Arc Testnet
           </div>
         ) : (
           <button
             type="submit"
             disabled={loading || !amountIn}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-sky-500/10 transition-all hover:from-sky-400 hover:to-indigo-400 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="defi-focus flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-300 px-6 py-3.5 font-bold text-slate-950 shadow-lg shadow-emerald-300/10 transition-all hover:bg-cyan-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -302,10 +351,11 @@ export function SwapWidget() {
           </button>
         )}
       </form>
+      )}
 
       {/* Error Output */}
       {error && (
-        <div className="mt-4 p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs text-center">
+        <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/5 p-3 text-center text-xs text-rose-300">
           {error}
         </div>
       )}

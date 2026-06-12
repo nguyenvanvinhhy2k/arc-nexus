@@ -96,11 +96,11 @@ export function BridgeWidget() {
   const isChainMismatched = mounted && isConnected && chain?.id !== fromChain.id;
 
   return (
-    <div className="w-full max-h-full max-w-md mx-auto overflow-y-auto rounded-2xl border border-zinc-800 bg-zinc-950/70 p-4 shadow-2xl backdrop-blur-lg">
+    <div className="defi-card w-full max-h-full max-w-md mx-auto overflow-y-auto rounded-lg p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-bold text-zinc-100">
           <span>Bridge Stablecoin</span>
-          <span className="text-[10px] uppercase font-bold tracking-widest text-sky-400 bg-sky-500/10 px-2 py-0.5 rounded-full border border-sky-500/20">
+          <span className="rounded-lg border border-cyan-300/25 bg-cyan-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-cyan-200">
             Circle CCTP
           </span>
         </h2>
@@ -109,7 +109,7 @@ export function BridgeWidget() {
       <form onSubmit={handleBridge} className="space-y-3">
         {/* Chain Selector (From / To) */}
         <div className="grid grid-cols-9 items-center gap-2">
-          <div className="col-span-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+          <div className="col-span-4 rounded-lg border border-white/10 bg-white/[0.045] p-3">
             <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-1">Source Chain</span>
             <select
               value={fromChain.id}
@@ -123,7 +123,7 @@ export function BridgeWidget() {
                   }
                 }
               }}
-              className="w-full bg-transparent text-sm font-semibold text-zinc-200 focus:outline-none cursor-pointer"
+              className="defi-focus w-full cursor-pointer bg-transparent text-sm font-semibold text-zinc-200"
               disabled={loading}
             >
               {BRIDGE_CHAINS.map((c) => (
@@ -139,13 +139,13 @@ export function BridgeWidget() {
               type="button"
               onClick={handleSwapChains}
               disabled={loading}
-              className="p-1.5 rounded-lg border border-zinc-800 bg-zinc-950 text-zinc-400 hover:text-sky-400 cursor-pointer"
+              className="defi-focus cursor-pointer rounded-lg border border-white/10 bg-slate-950 p-1.5 text-zinc-400 hover:text-cyan-300"
             >
               <ArrowRight className="h-4 w-4" />
             </button>
           </div>
 
-          <div className="col-span-4 rounded-2xl border border-zinc-800 bg-zinc-900 p-3">
+          <div className="col-span-4 rounded-lg border border-white/10 bg-white/[0.045] p-3">
             <span className="text-[10px] uppercase font-bold text-zinc-500 block mb-1">Dest Chain</span>
             <select
               value={toChain.id}
@@ -159,7 +159,7 @@ export function BridgeWidget() {
                   }
                 }
               }}
-              className="w-full bg-transparent text-sm font-semibold text-zinc-200 focus:outline-none cursor-pointer"
+              className="defi-focus w-full cursor-pointer bg-transparent text-sm font-semibold text-zinc-200"
               disabled={loading}
             >
               {BRIDGE_CHAINS.map((c) => (
@@ -172,7 +172,7 @@ export function BridgeWidget() {
         </div>
 
         {/* Token and Amount Input */}
-        <div className="rounded-2xl border border-zinc-800 bg-zinc-900 p-3.5">
+        <div className="rounded-lg border border-white/10 bg-white/[0.045] p-3.5">
           <div className="flex items-center justify-between mb-1.5 text-xs text-zinc-500">
             <span>Send Amount</span>
             <span>Balance: {balanceText} {token}</span>
@@ -192,7 +192,7 @@ export function BridgeWidget() {
             <select
               value={token}
               onChange={(e) => setToken(e.target.value as "USDC" | "EURC")}
-              className="bg-zinc-950 border border-zinc-800 rounded-xl px-3 py-1.5 text-sm font-semibold text-zinc-200 focus:outline-none cursor-pointer"
+              className="defi-focus cursor-pointer rounded-lg border border-white/10 bg-slate-950 px-3 py-1.5 text-sm font-semibold text-zinc-200"
               disabled={loading}
             >
               <option value="USDC" className="bg-zinc-950 text-zinc-200">USDC</option>
@@ -202,7 +202,7 @@ export function BridgeWidget() {
         </div>
 
         {/* Recipient Address */}
-        <div className="space-y-1.5 rounded-2xl border border-zinc-800 bg-zinc-900 p-3 focus-within:border-sky-500/50 transition-all">
+        <div className="space-y-1.5 rounded-lg border border-white/10 bg-white/[0.045] p-3 transition-all focus-within:border-cyan-300/50">
           <label className="text-[10px] uppercase font-bold text-zinc-500 flex items-center gap-1">
             <User className="h-3.5 w-3.5 text-zinc-600" />
             Recipient Address
@@ -219,13 +219,13 @@ export function BridgeWidget() {
         </div>
 
         {/* Speed Selection */}
-        <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-zinc-900/60 border border-zinc-900">
+        <div className="grid grid-cols-2 gap-2 rounded-lg border border-white/10 bg-slate-950/60 p-1.5">
           <button
             type="button"
             onClick={() => setSpeedMode("fast")}
-            className={`py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`cursor-pointer rounded-lg py-2 text-xs font-semibold transition-all ${
               speedMode === "fast"
-                ? "bg-zinc-900 text-zinc-100 border border-zinc-800 shadow"
+                ? "border border-cyan-300/25 bg-cyan-300/10 text-cyan-100 shadow"
                 : "text-zinc-500 hover:text-zinc-400"
             }`}
             disabled={loading}
@@ -235,9 +235,9 @@ export function BridgeWidget() {
           <button
             type="button"
             onClick={() => setSpeedMode("standard")}
-            className={`py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`cursor-pointer rounded-lg py-2 text-xs font-semibold transition-all ${
               speedMode === "standard"
-                ? "bg-zinc-900 text-zinc-100 border border-zinc-800 shadow"
+                ? "border border-cyan-300/25 bg-cyan-300/10 text-cyan-100 shadow"
                 : "text-zinc-500 hover:text-zinc-400"
             }`}
             disabled={loading}
@@ -247,7 +247,7 @@ export function BridgeWidget() {
         </div>
 
         {/* Fee estimation and timing information */}
-        <div className="space-y-2 rounded-2xl border border-zinc-900 bg-zinc-900/30 p-3 text-xs text-zinc-400">
+        <div className="space-y-2 rounded-lg border border-white/10 bg-slate-950/55 p-3 text-xs text-zinc-400">
           <div className="flex justify-between">
             <span>Bridge Gas Fee</span>
             <span className="font-semibold text-zinc-200">
@@ -274,18 +274,18 @@ export function BridgeWidget() {
 
         {/* Submit Button */}
         {(!mounted || !isConnected) ? (
-          <div className="w-full rounded-2xl border border-dashed border-zinc-800 px-4 py-3 text-center text-sm text-zinc-500">
+          <div className="w-full rounded-lg border border-dashed border-white/15 px-4 py-3 text-center text-sm text-zinc-500">
             Please connect wallet to bridge
           </div>
         ) : isChainMismatched ? (
-          <div className="w-full rounded-2xl border border-dashed border-rose-900/30 bg-rose-500/5 px-4 py-3 text-center text-sm text-rose-400/80">
+          <div className="w-full rounded-lg border border-dashed border-rose-400/30 bg-rose-500/5 px-4 py-3 text-center text-sm text-rose-300/80">
             Switch chain to {fromChain.name} to send
           </div>
         ) : (
           <button
             type="submit"
             disabled={loading || !amount || !recipient}
-            className="flex w-full cursor-pointer items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-sky-500 to-indigo-500 px-6 py-3.5 font-bold text-white shadow-lg shadow-sky-500/10 transition-all hover:from-sky-400 hover:to-indigo-400 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="defi-focus flex w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-emerald-300 px-6 py-3.5 font-bold text-slate-950 shadow-lg shadow-emerald-300/10 transition-all hover:bg-cyan-200 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -301,7 +301,7 @@ export function BridgeWidget() {
 
       {/* Error display */}
       {error && (
-        <div className="mt-4 p-3 rounded-xl border border-rose-500/20 bg-rose-500/5 text-rose-400 text-xs text-center">
+        <div className="mt-4 rounded-lg border border-rose-500/20 bg-rose-500/5 p-3 text-center text-xs text-rose-300">
           {error}
         </div>
       )}
