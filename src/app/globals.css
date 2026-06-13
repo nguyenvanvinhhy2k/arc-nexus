@@ -1,166 +1,649 @@
 @import "tailwindcss";
 
+/* ============================================================
+   ARC NEXUS — COSMIC UNIVERSE 3D DESIGN SYSTEM
+   ============================================================ */
+
 :root {
-  --background: #05070f;
-  --foreground: #f4f7fb;
-  --panel: rgba(11, 18, 32, 0.78);
-  --panel-strong: rgba(8, 12, 23, 0.92);
-  --line: rgba(148, 163, 184, 0.18);
-  --accent: #34f5c6;
-  --accent-2: #67e8f9;
+  /* Color palette — deep space */
+  --void: #010208;
+  --cosmos: #040818;
+  --nebula-deep: #070d22;
+  --nebula-mid: rgba(8, 12, 32, 0.88);
+  --panel: rgba(6, 10, 28, 0.72);
+  --panel-strong: rgba(4, 7, 20, 0.92);
+
+  /* Stellar accents */
+  --star-white: #f0f4ff;
+  --pulsar: #00e5ff;          /* electric cyan */
+  --quasar: #7c3aed;          /* deep violet */
+  --nova: #06b6d4;            /* cyan-500 */
+  --aurora: #4ade80;          /* green-400 */
+  --nebula-pink: #e879f9;     /* fuchsia-400 */
+  --solar: #fbbf24;           /* amber-400 */
+
+  /* Glow intensities */
+  --glow-pulsar: rgba(0, 229, 255, 0.22);
+  --glow-quasar: rgba(124, 58, 237, 0.28);
+  --glow-aurora: rgba(74, 222, 128, 0.18);
+  --glow-nova: rgba(6, 182, 212, 0.2);
+
+  /* Borders */
+  --border-dim: rgba(148, 163, 184, 0.12);
+  --border-pulsar: rgba(0, 229, 255, 0.22);
+  --border-quasar: rgba(124, 58, 237, 0.3);
+
+  /* Legacy compat */
+  --background: var(--void);
+  --foreground: var(--star-white);
+  --accent: var(--pulsar);
+  --accent-2: var(--nova);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--void);
+  --color-foreground: var(--star-white);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
+/* ============================================================
+   BASE RESET & BODY
+   ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--void);
+  color: var(--star-white);
   font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
   overflow-x: hidden;
   min-height: 100dvh;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(52, 245, 198, 0.16), transparent 32rem),
-    radial-gradient(circle at 78% 16%, rgba(103, 232, 249, 0.12), transparent 30rem),
-    linear-gradient(135deg, #05070f 0%, #08111e 48%, #05070f 100%);
+  background-image: url("/space-nebula-bg.png");
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
+/* ============================================================
+   CUSTOM SCROLLBAR
+   ============================================================ */
 
-::-webkit-scrollbar-track {
-  background: #05070f;
-}
-
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb {
-  background: #263447;
+  background: linear-gradient(to bottom, var(--quasar), var(--pulsar));
   border-radius: 9999px;
 }
+::-webkit-scrollbar-thumb:hover { background: var(--pulsar); }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #34f5c6;
-}
-
-/* Fix browser native dropdown option style clash (white text on white background) */
+/* Fix browser native dropdown option style clash */
 option {
-  background-color: #07101d !important;
-  color: #f4f7fb !important;
+  background-color: #060a1c !important;
+  color: var(--star-white) !important;
 }
+
+/* ============================================================
+   SPACE CANVAS LAYER (animated stars + cosmic background)
+   ============================================================ */
+
+.space-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Starfield layers */
+.stars-layer {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 15% 22%, rgba(255,255,255,0.9) 0%, transparent 100%),
+    radial-gradient(1px 1px at 42% 8%, rgba(200,220,255,0.7) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 67% 31%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 88% 14%, rgba(180,200,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5% 58%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 31% 74%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 54% 62%, rgba(200,210,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 76% 49%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 77%, rgba(180,220,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 23% 88%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(2px 2px at 48% 93%, rgba(150,180,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 71% 85%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 9% 37%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 35% 46%, rgba(200,230,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 18%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 83% 60%, rgba(180,200,255,0.5) 0%, transparent 100%),
+    radial-gradient(2px 2px at 19% 70%, rgba(255,255,255,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 44% 28%, rgba(220,240,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 97% 42%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 96%, rgba(150,200,255,0.5) 0%, transparent 100%);
+  animation: star-twinkle 8s ease-in-out infinite alternate;
+}
+
+.stars-layer-2 {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 28% 16%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 35%, rgba(200,220,255,0.5) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 73% 7%, rgba(255,255,255,0.8) 0%, transparent 100%),
+    radial-gradient(1px 1px at 11% 48%, rgba(180,210,255,0.4) 0%, transparent 100%),
+    radial-gradient(2px 2px at 39% 55%, rgba(255,255,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 64% 72%, rgba(200,230,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 38%, rgba(255,255,255,0.6) 0%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 17% 82%, rgba(150,190,255,0.7) 0%, transparent 100%),
+    radial-gradient(1px 1px at 96% 24%, rgba(255,255,255,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 50% 89%, rgba(180,220,255,0.4) 0%, transparent 100%);
+  animation: star-twinkle 6s ease-in-out 2s infinite alternate;
+  opacity: 0.7;
+}
+
+/* Nebula overlays */
+.nebula-left {
+  position: absolute;
+  top: -10%;
+  left: -15%;
+  width: 55%;
+  height: 80%;
+  background: radial-gradient(
+    ellipse at 30% 40%,
+    rgba(124, 58, 237, 0.18) 0%,
+    rgba(139, 92, 246, 0.08) 35%,
+    transparent 70%
+  );
+  filter: blur(40px);
+  animation: nebula-pulse 12s ease-in-out infinite alternate;
+}
+
+.nebula-right {
+  position: absolute;
+  top: 20%;
+  right: -10%;
+  width: 45%;
+  height: 70%;
+  background: radial-gradient(
+    ellipse at 70% 30%,
+    rgba(0, 229, 255, 0.14) 0%,
+    rgba(6, 182, 212, 0.07) 40%,
+    transparent 70%
+  );
+  filter: blur(50px);
+  animation: nebula-pulse 15s ease-in-out 3s infinite alternate;
+}
+
+.nebula-bottom {
+  position: absolute;
+  bottom: -20%;
+  left: 25%;
+  width: 60%;
+  height: 60%;
+  background: radial-gradient(
+    ellipse at 50% 80%,
+    rgba(232, 121, 249, 0.09) 0%,
+    rgba(168, 85, 247, 0.05) 45%,
+    transparent 70%
+  );
+  filter: blur(60px);
+  animation: nebula-pulse 18s ease-in-out 6s infinite alternate;
+}
+
+/* Perspective grid */
+.cosmos-grid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 45%;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.4) 1px, transparent 1px);
+  background-size: 60px 60px;
+  transform: perspective(600px) rotateX(72deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+}
+
+/* Shooting star */
+.shooting-star {
+  position: absolute;
+  top: 18%;
+  left: -5%;
+  width: 3px;
+  height: 3px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 8px 2px rgba(255,255,255,0.8), 0 0 20px 4px rgba(0,229,255,0.4);
+  animation: shooting 8s linear 2s infinite;
+}
+
+.shooting-star-2 {
+  position: absolute;
+  top: 42%;
+  left: -5%;
+  width: 2px;
+  height: 2px;
+  background: rgba(200,220,255,0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 6px 2px rgba(255,255,255,0.6);
+  animation: shooting 11s linear 7s infinite;
+}
+
+/* ============================================================
+   3D ORBITAL RINGS (decorative background element)
+   ============================================================ */
+
+.orbital-system {
+  position: absolute;
+  z-index: 1;
+  right: -6rem;
+  top: 4rem;
+  width: min(42vw, 520px);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+
+.orbit-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid var(--border-pulsar);
+  transform: rotateX(68deg) rotateZ(-20deg);
+  transform-style: preserve-3d;
+  box-shadow:
+    0 0 60px rgba(0, 229, 255, 0.08),
+    inset 0 0 40px rgba(0, 229, 255, 0.04);
+  animation: orbit-rotate 25s linear infinite;
+}
+
+.orbit-ring-2 {
+  position: absolute;
+  inset: 14%;
+  border-radius: 50%;
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  transform: rotateX(68deg) rotateZ(-20deg);
+  box-shadow: 0 0 40px rgba(124, 58, 237, 0.1);
+  animation: orbit-rotate 18s linear reverse infinite;
+}
+
+.orbit-ring-3 {
+  position: absolute;
+  inset: 30%;
+  border-radius: 50%;
+  border: 1px solid rgba(232, 121, 249, 0.2);
+  transform: rotateX(68deg) rotateZ(-20deg);
+  box-shadow:
+    inset 0 0 28px rgba(232, 121, 249, 0.12),
+    0 0 28px rgba(232, 121, 249, 0.08);
+  animation: orbit-rotate 12s linear infinite;
+}
+
+/* Orbiting dot on ring */
+.orbit-dot {
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pulsar);
+  box-shadow: 0 0 12px 4px rgba(0, 229, 255, 0.6), 0 0 24px 8px rgba(0, 229, 255, 0.2);
+  transform: translateY(-50%);
+}
+
+/* Floating crystal cube */
+.cosmos-crystal {
+  position: absolute;
+  z-index: 1;
+  width: 72px;
+  aspect-ratio: 1;
+  right: 22vw;
+  top: 10rem;
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  background:
+    linear-gradient(145deg, rgba(0, 229, 255, 0.15), rgba(124, 58, 237, 0.1)),
+    rgba(4, 7, 20, 0.7);
+  transform: perspective(600px) rotateX(55deg) rotateZ(38deg);
+  box-shadow:
+    0 24px 60px rgba(0, 229, 255, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15),
+    0 0 40px rgba(124, 58, 237, 0.12);
+  backdrop-filter: blur(8px);
+  animation: crystal-float 9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.cosmos-crystal::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12) 0%,
+    transparent 50%,
+    rgba(0,229,255,0.08) 100%
+  );
+}
+
+/* ============================================================
+   DEFI SHELL (main layout wrapper)
+   ============================================================ */
 
 .defi-shell {
   position: relative;
   isolation: isolate;
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, 0.03), transparent 24rem),
-    linear-gradient(180deg, rgba(5, 7, 15, 0.1), rgba(5, 7, 15, 0.92));
 }
 
-.defi-grid {
-  position: absolute;
-  inset: 0;
-  z-index: -3;
-  opacity: 0.42;
-  background-image:
-    linear-gradient(rgba(52, 245, 198, 0.1) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(103, 232, 249, 0.08) 1px, transparent 1px);
-  background-size: 58px 58px;
-  mask-image: linear-gradient(to bottom, black, transparent 78%);
-}
-
-.defi-orbit {
-  position: absolute;
-  z-index: -2;
-  width: min(46vw, 560px);
-  aspect-ratio: 1;
-  right: -10rem;
-  top: 5rem;
-  border: 1px solid rgba(52, 245, 198, 0.18);
-  border-radius: 999px;
-  transform: rotateX(64deg) rotateZ(-24deg);
-  transform-style: preserve-3d;
-  box-shadow:
-    0 0 0 42px rgba(52, 245, 198, 0.025),
-    0 0 120px rgba(52, 245, 198, 0.1);
-}
-
-.defi-orbit::before,
-.defi-orbit::after {
-  content: "";
-  position: absolute;
-  inset: 14%;
-  border-radius: inherit;
-  border: 1px solid rgba(103, 232, 249, 0.16);
-}
-
-.defi-orbit::after {
-  inset: 31%;
-  border-color: rgba(244, 247, 251, 0.18);
-  box-shadow: inset 0 0 42px rgba(103, 232, 249, 0.1);
-}
-
-.defi-cube {
-  position: absolute;
-  z-index: -1;
-  width: 84px;
-  aspect-ratio: 1;
-  right: 19vw;
-  top: 11rem;
-  border: 1px solid rgba(52, 245, 198, 0.34);
-  background:
-    linear-gradient(145deg, rgba(52, 245, 198, 0.16), rgba(103, 232, 249, 0.05)),
-    rgba(8, 12, 23, 0.72);
-  transform: perspective(700px) rotateX(58deg) rotateZ(42deg);
-  box-shadow: 0 28px 80px rgba(52, 245, 198, 0.14);
-  animation: cube-drift 8s ease-in-out infinite;
-}
+/* ============================================================
+   COSMIC GLASS CARDS
+   ============================================================ */
 
 .defi-card {
-  border: 1px solid var(--line);
+  border: 1px solid var(--border-dim);
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.026)),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.015)),
     var(--panel);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.24);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
 }
 
 .defi-card-strong {
-  border: 1px solid rgba(52, 245, 198, 0.18);
+  border: 1px solid var(--border-pulsar);
   background:
-    radial-gradient(circle at 18% 0%, rgba(52, 245, 198, 0.12), transparent 18rem),
-    linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.018)),
+    radial-gradient(circle at 15% 0%, rgba(0, 229, 255, 0.09), transparent 18rem),
+    radial-gradient(circle at 85% 100%, rgba(124, 58, 237, 0.07), transparent 14rem),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.065), rgba(255, 255, 255, 0.012)),
     var(--panel-strong);
   box-shadow:
+    0 0 0 1px rgba(0, 229, 255, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 30px 90px rgba(0, 0, 0, 0.34);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+    0 24px 80px rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(0, 229, 255, 0.06);
+  backdrop-filter: blur(28px) saturate(1.6);
+  -webkit-backdrop-filter: blur(28px) saturate(1.6);
 }
 
-.defi-focus:focus {
-  outline: 2px solid rgba(52, 245, 198, 0.78);
+/* Sidebar card with subtle quasar tint */
+.sidebar-panel {
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(124, 58, 237, 0.1), transparent 14rem),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055) 0%, rgba(255, 255, 255, 0.01) 100%),
+    rgba(4, 6, 18, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   FOCUS & INTERACTION
+   ============================================================ */
+
+.defi-focus:focus-visible {
+  outline: 2px solid rgba(0, 229, 255, 0.7);
   outline-offset: 2px;
 }
 
-@keyframes cube-drift {
+/* ============================================================
+   NAVIGATION ITEMS
+   ============================================================ */
+
+.nav-item-active {
+  border-color: rgba(0, 229, 255, 0.3);
+  background:
+    linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(124, 58, 237, 0.06)),
+    rgba(0, 229, 255, 0.04);
+  box-shadow:
+    0 0 28px rgba(0, 229, 255, 0.1),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+}
+
+.nav-item-active-dot {
+  background: linear-gradient(to bottom, var(--pulsar), var(--nova));
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.8);
+}
+
+.nav-icon-active {
+  background: linear-gradient(135deg, var(--pulsar), var(--nova));
+  color: #01080e;
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.35);
+}
+
+/* ============================================================
+   STATUS INDICATORS — PULSING DOTS
+   ============================================================ */
+
+.status-dot-online {
+  background: var(--aurora);
+  box-shadow: 0 0 6px rgba(74, 222, 128, 0.8);
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.status-dot-ready {
+  background: var(--pulsar);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.8);
+  animation: pulse-dot 2.4s ease-in-out infinite;
+}
+
+.status-dot-standby {
+  background: var(--nebula-pink);
+  box-shadow: 0 0 6px rgba(232, 121, 249, 0.7);
+  animation: pulse-dot 3s ease-in-out infinite;
+}
+
+/* ============================================================
+   HEADER / TOP BAR
+   ============================================================ */
+
+.cosmos-header {
+  border: 1px solid rgba(0, 229, 255, 0.15);
+  background:
+    linear-gradient(90deg, rgba(0, 229, 255, 0.05), rgba(124, 58, 237, 0.05)),
+    rgba(1, 3, 12, 0.88);
+  backdrop-filter: blur(32px) saturate(1.6);
+  -webkit-backdrop-filter: blur(32px) saturate(1.6);
+  box-shadow:
+    0 1px 0 rgba(0, 229, 255, 0.15),
+    0 0 40px rgba(0, 229, 255, 0.04),
+    0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+/* ============================================================
+   METRIC TILES
+   ============================================================ */
+
+.metric-tile {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02)),
+    rgba(2, 5, 20, 0.85);
+  backdrop-filter: blur(16px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+}
+
+.metric-tile:hover {
+  border-color: rgba(0, 229, 255, 0.3);
+  box-shadow:
+    0 0 24px rgba(0, 229, 255, 0.1),
+    inset 0 1px 0 rgba(0, 229, 255, 0.06);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   SECTION PANELS (right sidebar)
+   ============================================================ */
+
+.cosmos-section {
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.01)),
+    rgba(3, 5, 18, 0.8);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 12px 40px rgba(0, 0, 0, 0.3);
+}
+
+.cosmos-section-highlight {
+  border: 1px solid rgba(0, 229, 255, 0.2);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(0, 229, 255, 0.1), transparent 12rem),
+    linear-gradient(145deg, rgba(0, 229, 255, 0.06), rgba(124, 58, 237, 0.04)),
+    rgba(2, 5, 16, 0.88);
+  box-shadow:
+    0 0 40px rgba(0, 229, 255, 0.06),
+    inset 0 1px 0 rgba(0, 229, 255, 0.1);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+
+.btn-cosmic {
+  background: linear-gradient(135deg, var(--pulsar) 0%, var(--nova) 100%);
+  color: #01080e;
+  font-weight: 800;
+  border: none;
+  box-shadow:
+    0 0 24px rgba(0, 229, 255, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.2s;
+}
+
+.btn-cosmic:hover:not(:disabled) {
+  background: linear-gradient(135deg, #33eeff 0%, #22d3ee 100%);
+  box-shadow:
+    0 0 40px rgba(0, 229, 255, 0.45),
+    0 6px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-cosmic:active:not(:disabled) {
+  transform: scale(0.98) translateY(0);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.2);
+}
+
+/* ============================================================
+   FORM INPUTS
+   ============================================================ */
+
+.cosmos-input-wrap {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+    rgba(1, 3, 12, 0.7);
+  backdrop-filter: blur(8px);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.cosmos-input-wrap:focus-within {
+  border-color: rgba(0, 229, 255, 0.45);
+  box-shadow: 0 0 20px rgba(0, 229, 255, 0.08), inset 0 0 12px rgba(0, 229, 255, 0.03);
+}
+
+/* ============================================================
+   MOBILE TABS
+   ============================================================ */
+
+.tab-active-cosmic {
+  background: linear-gradient(135deg, var(--pulsar), var(--nova));
+  color: #01080e;
+  border-color: transparent;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.3);
+}
+
+/* ============================================================
+   KEYFRAME ANIMATIONS
+   ============================================================ */
+
+@keyframes star-twinkle {
+  0%   { opacity: 0.7; }
+  33%  { opacity: 1; }
+  66%  { opacity: 0.6; }
+  100% { opacity: 0.9; }
+}
+
+@keyframes nebula-pulse {
+  0%   { opacity: 0.7; transform: scale(1) rotate(0deg); }
+  50%  { opacity: 1; transform: scale(1.08) rotate(2deg); }
+  100% { opacity: 0.8; transform: scale(0.96) rotate(-1deg); }
+}
+
+@keyframes orbit-rotate {
+  from { transform: rotateX(68deg) rotateZ(-20deg) rotateY(0deg); }
+  to   { transform: rotateX(68deg) rotateZ(-20deg) rotateY(360deg); }
+}
+
+@keyframes crystal-float {
   0%, 100% {
-    transform: perspective(700px) rotateX(58deg) rotateZ(42deg) translate3d(0, 0, 0);
+    transform: perspective(600px) rotateX(55deg) rotateZ(38deg) translate3d(0, 0, 0);
   }
   50% {
-    transform: perspective(700px) rotateX(58deg) rotateZ(42deg) translate3d(8px, -18px, 0);
+    transform: perspective(600px) rotateX(55deg) rotateZ(38deg) translate3d(10px, -20px, 0);
   }
 }
 
+@keyframes shooting {
+  0% {
+    transform: translateX(0) translateY(0);
+    opacity: 0;
+    width: 3px;
+  }
+  5% {
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(110vw) translateY(40vh);
+    opacity: 0;
+    width: 120px;
+  }
+  100% {
+    transform: translateX(110vw) translateY(40vh);
+    opacity: 0;
+    width: 3px;
+  }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 6px currentColor; }
+  50%       { opacity: 0.5; box-shadow: 0 0 2px currentColor; }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+
 @media (prefers-reduced-motion: reduce) {
-  .defi-cube {
+  .stars-layer,
+  .stars-layer-2,
+  .nebula-left,
+  .nebula-right,
+  .nebula-bottom,
+  .orbit-ring,
+  .orbit-ring-2,
+  .orbit-ring-3,
+  .cosmos-crystal,
+  .shooting-star,
+  .shooting-star-2 {
     animation: none;
   }
 }
-
